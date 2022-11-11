@@ -17,13 +17,14 @@ spring:
       username: "${app.datasource.mysql.username}"
       password: "${app.datasource.mysql.password}"
       driver-class-name: com.mysql.cj.jdbc.Driver
-    jpa:
-      open-in-view: false
-      database: mysql
-      generate-ddl: false
-      properties:
-        hibernate:
-          format_sql: true
+  jpa:
+    open-in-view: false
+    database: mysql
+    generate-ddl: false
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
 
 logging.level:
   org.hibernate:
