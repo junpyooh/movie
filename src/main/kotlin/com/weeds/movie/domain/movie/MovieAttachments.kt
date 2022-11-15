@@ -14,6 +14,7 @@ class MovieAttachments(
     @Column
     val size: String,
     @Column
+    @Convert(converter = FileTypeConverter::class)
     val type: FileType,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movieId")
