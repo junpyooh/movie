@@ -1,4 +1,4 @@
-package com.weeds.movie.domain
+package com.weeds.movie.domain.kernel
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
