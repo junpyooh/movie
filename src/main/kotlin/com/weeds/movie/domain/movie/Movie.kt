@@ -15,6 +15,8 @@ class Movie(
     @Column
     val realTitle: String?,
     @Column
+    val subTitle: String?,
+    @Column
     @Convert(converter = MediaTypeConverter::class)
     val mediaType: MediaType,
     @Column
@@ -39,12 +41,19 @@ class Movie(
     @Column
     val revenue: Int?,
     @Column
-    val runningTime: Int?,
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
-    val keyword: MutableList<Keyword>?,
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
-    val genre: MutableList<Genre>?
+    val filmAgeRate: Int,
+    @Column
+    val runningTime: Int?
 ) : BaseEntity() {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
+    val keywords: MutableList<Keyword>? = mutableListOf()
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
+    val genres: MutableList<Genre>? = mutableListOf()
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
+    val attachments: MutableList<MovieAttachments>? = mutableListOf()
 
     @Column
     @Convert(converter = MovieStateConverter::class)
@@ -74,13 +83,13 @@ class Movie(
     }
 
     fun checkMovieDate(): MovieState? {
-        if(this.openedAt.isAfter(Instant.now())) {
+        if (this.openedAt.isAfter(Instant.now())) {
             return MovieState.PENDING
         }
         if (this.openedAt.isBeforeOrEqual(Instant.now())) {
             return MovieState.ONGOING
         }
-        if(isMovieOver()) {
+        if (isMovieOver()) {
             return MovieState.OVERDUE
         }
         return null

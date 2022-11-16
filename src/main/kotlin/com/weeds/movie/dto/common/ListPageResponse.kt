@@ -1,4 +1,4 @@
-package com.weeds.movie.common
+package com.weeds.movie.dto.common
 
 data class ListPageResponse<T>(
     val result: List<T> = listOf(),
