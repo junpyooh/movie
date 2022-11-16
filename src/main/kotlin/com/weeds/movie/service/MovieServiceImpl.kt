@@ -55,6 +55,7 @@ class MovieServiceImpl(
     @Transactional
     override fun getLatestTrailerListByPlayType(playType: PlayType): ListPageResponse<MovieTrailerListDTO> {
         val response = movieRepository.findAllByPlayType(playType)
+            .sortedByDescending { it.createdAt }
 
         return ListPageResponse(
             result = response.map(MovieTrailerListDTO::of),
