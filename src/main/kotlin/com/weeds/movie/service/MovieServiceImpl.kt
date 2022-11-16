@@ -1,9 +1,14 @@
 package com.weeds.movie.service
 
+import com.weeds.movie.domain.movie.MediaType
 import com.weeds.movie.dto.common.ResultResponse
 import com.weeds.movie.domain.movie.Movie
+import com.weeds.movie.domain.movie.PlayType
 import com.weeds.movie.domain.trend.Trend
+import com.weeds.movie.dto.common.ListPageResponse
 import com.weeds.movie.dto.movie.MovieDTO
+import com.weeds.movie.dto.movie.MovieListDTO
+import com.weeds.movie.dto.movie.MovieTrailerListDTO
 import com.weeds.movie.repository.movie.MovieRepository
 import com.weeds.movie.repository.trend.TrendRepository
 import com.weeds.movie.util.findByIdOrThrow
@@ -24,6 +29,38 @@ class MovieServiceImpl(
         ).also {
             createTrend(movie)
         }
+    }
+
+    @Transactional
+    override fun getMovieListByPlayType(playType: PlayType): ListPageResponse<MovieListDTO> {
+        val response = movieRepository.findAllByPlayType(playType)
+            .sortedBy { it.hitCount.dec() }
+
+        return ListPageResponse(
+            result = response.map(MovieListDTO::of),
+            totalCount = response.size.toLong()
+        )
+    }
+
+    @Transactional
+    override fun getMovieListByMediaType(mediaType: MediaType): ListPageResponse<MovieListDTO> {
+        val response = movieRepository.findAllByMediaType(mediaType)
+
+        return ListPageResponse(
+            result = response.map(MovieListDTO::of),
+            totalCount = response.size.toLong()
+        )
+    }
+
+    @Transactional
+    override fun getLatestTrailerListByPlayType(playType: PlayType): ListPageResponse<MovieTrailerListDTO> {
+        val response = movieRepository.findAllByPlayType(playType)
+            .sortedByDescending { it.createdAt }
+
+        return ListPageResponse(
+            result = response.map(MovieTrailerListDTO::of),
+            totalCount = response.size.toLong()
+        )
     }
 
     private fun createTrend(movie: Movie) {
