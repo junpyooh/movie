@@ -42,7 +42,7 @@ class MovieController(
             movieService.getLatestTrailerListByPlayType(playType)
         )
 
-    @GetMapping("/trend")
+    @GetMapping("/trends")
     fun getTrendMovieList(
         @RequestParam term: DayTerm,
         @RequestParam condition: TrendSearchKeyword
