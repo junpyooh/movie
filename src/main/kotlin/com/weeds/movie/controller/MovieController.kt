@@ -2,6 +2,8 @@ package com.weeds.movie.controller
 
 import com.weeds.movie.domain.movie.MediaType
 import com.weeds.movie.domain.movie.PlayType
+import com.weeds.movie.dto.movie.DayTerm
+import com.weeds.movie.dto.trend.TrendSearchKeyword
 import com.weeds.movie.service.MovieService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -38,5 +40,14 @@ class MovieController(
     fun getLatestTrailerListByPlayType(@RequestParam playType: PlayType) =
         ResponseEntity.status(HttpStatus.OK).body(
             movieService.getLatestTrailerListByPlayType(playType)
+        )
+
+    @GetMapping("/trends")
+    fun getTrendMovieList(
+        @RequestParam term: DayTerm,
+        @RequestParam condition: TrendSearchKeyword
+    ) =
+        ResponseEntity.status(HttpStatus.OK).body(
+            movieService.getTrendMovieList(term, condition)
         )
 }

@@ -6,9 +6,11 @@ import com.weeds.movie.domain.movie.Movie
 import com.weeds.movie.domain.movie.PlayType
 import com.weeds.movie.domain.trend.Trend
 import com.weeds.movie.dto.common.ListPageResponse
+import com.weeds.movie.dto.movie.DayTerm
 import com.weeds.movie.dto.movie.MovieDTO
 import com.weeds.movie.dto.movie.MovieListDTO
 import com.weeds.movie.dto.movie.MovieTrailerListDTO
+import com.weeds.movie.dto.trend.TrendSearchKeyword
 import com.weeds.movie.repository.movie.MovieRepository
 import com.weeds.movie.repository.trend.TrendRepository
 import com.weeds.movie.util.findByIdOrThrow
@@ -59,6 +61,17 @@ class MovieServiceImpl(
 
         return ListPageResponse(
             result = response.map(MovieTrailerListDTO::of),
+            totalCount = response.size.toLong()
+        )
+    }
+
+    @Transactional
+    override fun getTrendMovieList(term: DayTerm, keyword: TrendSearchKeyword): ListPageResponse<MovieListDTO> {
+        val response = trendRepository.getTrendMovieList(term, keyword)
+        return ListPageResponse(
+            result = response.map {
+                MovieListDTO.of(it.movie)
+            },
             totalCount = response.size.toLong()
         )
     }
